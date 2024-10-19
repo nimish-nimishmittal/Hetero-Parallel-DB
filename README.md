@@ -64,6 +64,13 @@ When you're done, don’t forget to stop the Docker service with:
 
 An amazing thing about **Hetero Parallel DB** is that even if you stop or delete the project, or accidentally delete the database, **the data remains intact**! When you spin up the containers again, the data gets restored automatically, thanks to Docker’s persistent volumes.
 
+
+### Contributions
+
+Contributions are always welcome! However, a small request to keep things real – if you're working on **HTML files** or frontend shit, feel free to use tools like ChatGPT to help you along the way and build things fast as fuck boi !!
+
+But, when it comes to **routes, configurations, or backend logic**, please refrain yourself from using ChatGPT or Copilot shit. Fuck you if your pookie mind directs you to do so !!
+
 ---
 
 Enjoy working with **Hetero Parallel DB** and experience the future of database parallelism in action!
