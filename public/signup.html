@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+</head>
+<body>
+    <h1>User Sign-Up</h1>
+    <form id="signupForm">
+        <label for="Uname">Name:</label>
+        <input type="text" id="Uname" name="Uname" required><br>
+
+        <label for="Umobile">Mobile:</label>
+        <input type="text" id="Umobile" name="Umobile" required><br>
+
+        <label for="Uemail">Email:</label>
+        <input type="email" id="Uemail" name="Uemail" required><br>
+
+        <label for="Upassword">Password:</label>
+        <input type="password" id="Upassword" name="Upassword" required><br>
+
+        <button type="submit">Sign Up</button>
+
+        
+    </form>
+    <a href="signin.html">Sign in If Registered !!</a>
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const Uname = document.getElementById('Uname').value;
+            const Umobile = document.getElementById('Umobile').value;
+            const Uemail = document.getElementById('Uemail').value;
+            const Upassword = document.getElementById('Upassword').value;
+
+            const response = await fetch('/auth/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ Uname, Umobile, Uemail, Upassword })
+            });
+
+            const data = await response.json();
+            alert(data.message);
+        });
+    </script>
+    <style>
+        /* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #74ebd5 0%, #acb6e5 100%); /* Gradient background */
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c3e50; /* Darker shade for heading */
+}
+
+/* Form Styles */
+form {
+    max-width: 400px;
+    margin: 0 auto; /* Center the form */
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Input Styles */
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Button Styles */
+button {
+    background: linear-gradient(90deg, #ff7e5f 0%, #feb47b 100%); /* Colorful button */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+    width: 100%;
+}
+
+button:hover {
+    background: linear-gradient(90deg, #feb47b 0%, #ff7e5f 100%); /* Reverse gradient on hover */
+}
+
+/* Link Styles */
+a {
+    display: inline-block;
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px 15px;
+    background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%); /* Colorful link button */
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+a:hover {
+    background: linear-gradient(90deg, #2575fc 0%, #6a11cb 100%); /* Reverse gradient on hover */
+}
+
+/* Responsive Styles */
+@media (max-width: 500px) {
+    h1 {
+        font-size: 1.5em; /* Smaller heading on mobile */
+    }
+
+    form {
+        padding: 15px;
+    }
+
+    button,
+    a {
+        padding: 8px 12px; /* Smaller button padding on mobile */
+    }
+}
+    </style>
+</body>
+</html>
