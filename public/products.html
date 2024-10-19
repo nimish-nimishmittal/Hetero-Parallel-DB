@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+    <style>
+        
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 60px; /* Location of the box */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+        }
+
+        /* Close Button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Product List</h1>
+        <table id="productTable">
+            <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Name</th>
+                    <th>Image</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="productBody">
+                <!-- Product rows will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+
+        <!-- Logout Button -->
+        <div style="text-align: center; margin-top: 20px;">
+            <button class="logout-button" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <!-- Modal for Review -->
+    <div id="reviewModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Submit Review</h2>
+            <textarea id="reviewText" placeholder="Write your review here..." rows="4" style="width: 100%;"></textarea>
+            <button id="submitReviewButton">Submit</button>
+        </div>
+    </div>
+
+    <script>
+        let currentProductId = null;
+
+        // Fetching products from the server
+        async function fetchProducts() {
+            try {
+                const response = await fetch('/api/products');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                const products = await response.json();
+                const productBody = document.getElementById('productBody');
+
+                // Check if products array is empty
+                if (products.length === 0) {
+                    productBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No products found.</td></tr>';
+                    return;
+                }
+
+                products.forEach(product => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${product.Pid}</td>
+                        <td>${product.Pname}</td>
+                        <td><img src="${product.Pphoto}" alt="${product.Pname}" class="product-image"></td>
+                        <td>${product.Pprice}</td>
+                        <td>${product.Pdesc}</td>
+                        <td>
+                            <button class="review-button" onclick="showReviewModal(${product.Pid})">Give Review</button>
+                        </td>
+                    `;
+                    productBody.appendChild(row);
+                });
+            } catch (err) {
+                console.error('Error fetching products:', err);
+                const productBody = document.getElementById('productBody');
+                productBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Error fetching products.</td></tr>';
+            }
+        }
+
+        // Function to show review modal
+        function showReviewModal(pid) {
+            currentProductId = pid; // Set current product ID
+            document.getElementById('reviewModal').style.display = 'block';
+        }
+
+        // Function to close modal
+        function closeModal() {
+            document.getElementById('reviewModal').style.display = 'none';
+        }
+
+        // Function to submit review
+        async function submitReview() {
+            const reviewText = document.getElementById('reviewText').value;
+
+            const response = await fetch('/api/review', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    Pid: currentProductId,
+                    review: reviewText,
+                }),
+            });
+
+            const result = await response.json();
+            alert(result.message);
+            closeModal(); // Close the modal after submission
+        }
+
+        // Attach submitReview function to button
+        document.getElementById('submitReviewButton').onclick = submitReview;
+
+        // Call the function to fetch products when the page loads
+        window.onload = fetchProducts;
+
+        // Logout function
+        // Logout function in products.html
+async function logout() {
+    try {
+        const response = await fetch('/auth/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            window.location.href = result.redirectUrl; // Redirect to sign-in page
+        } else {
+            alert('Error logging out');
+        }
+    } catch (err) {
+        console.error('Logout failed:', err);
+        alert('Error logging out');
+    }
+}
+
+    </script>
+    <style>
+        /* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #ffafbd 0%, #ffc3a0 100%); /* Gradient background */
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading Styles */
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #4CAF50; /* Table header color */
+    color: white;
+    font-weight: bold;
+}
+
+tr:hover {
+    background-color: #f1f1f1; /* Row hover effect */
+}
+
+/* Product Image Styles */
+.product-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+}
+
+/* Button Styles */
+button {
+    background-color: #4CAF50; /* Button background color */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049; /* Button hover effect */
+}
+
+.review-button {
+    background-color: #4CAF50; /* Review button color */
+}
+
+.review-button:hover {
+    background-color: #45a049; /* Review button hover effect */
+}
+
+/* Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+    padding-top: 60px; /* Location of the box */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    border-radius: 8px; /* Rounded corners for modal */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Shadow effect */
+}
+
+/* Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Textarea Styles */
+textarea {
+    width: 100%;
+    margin-top: 5px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: none; /* Prevent resizing */
+}
+
+/* Logout Button Styles */
+.logout-button {
+    background-color: #e74c3c; /* Logout button color */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+    background-color: #c0392b; /* Logout button hover effect */
+}
+
+/* Responsive Styles */
+@media (max-width: 500px) {
+    h1 {
+        font-size: 1.5em; /* Smaller heading on mobile */
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    button,
+    .logout-button {
+        padding: 8px 12px; /* Smaller button padding on mobile */
+    }
+}
+
+    </style>
+</body>
+</html>

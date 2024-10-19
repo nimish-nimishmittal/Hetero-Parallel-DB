@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+</head>
+<body>
+    <h1>User Sign-In</h1>
+    <form id="signinForm">
+        <label for="Uemail">Email:</label>
+        <input type="email" id="Uemail" name="Uemail" required><br>
+
+        <label for="Upassword">Password:</label>
+        <input type="password" id="Upassword" name="Upassword" required><br>
+
+        <button type="submit">Sign In</button>
+    </form>
+    <a href="./signup.html">Didn't Register ?? Register Now !!</a>
+    <script>
+        document.getElementById('signinForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent default form submission
+    
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+    
+            try {
+                const response = await fetch('/auth/signin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+    
+                if (response.ok) {
+                    const result = await response.json();
+                    // Redirect to the products page
+                    window.location.href = result.redirectUrl; // Use redirect URL from response
+                } else {
+                    const result = await response.json();
+                    alert(result.message); // Show error message
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+    <style>
+        /* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #ffafbd 0%, #ffc3a0 100%); /* Gradient background */
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c3e50; /* Darker shade for heading */
+}
+
+/* Form Styles */
+form {
+    max-width: 400px;
+    margin: 0 auto; /* Center the form */
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Input Styles */
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Button Styles */
+button {
+    background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%); /* Colorful button */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+    width: 100%;
+}
+
+button:hover {
+    background: linear-gradient(90deg, #2575fc 0%, #6a11cb 100%); /* Reverse gradient on hover */
+}
+
+/* Link Styles */
+a {
+    display: inline-block;
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px 15px;
+    background: linear-gradient(90deg, #ff7e5f 0%, #feb47b 100%); /* Colorful link button */
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+a:hover {
+    background: linear-gradient(90deg, #feb47b 0%, #ff7e5f 100%); /* Reverse gradient on hover */
+}
+
+/* Responsive Styles */
+@media (max-width: 500px) {
+    h1 {
+        font-size: 1.5em; /* Smaller heading on mobile */
+    }
+
+    form {
+        padding: 15px;
+    }
+
+    button,
+    a {
+        padding: 8px 12px; /* Smaller button padding on mobile */
+    }
+}
+    </style>    
+</body>
+</html>
