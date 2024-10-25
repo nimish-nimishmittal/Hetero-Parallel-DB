@@ -1,5 +1,5 @@
 
-# Hetero Parallel DB
+# Hetero Parallel DB [draft]
 
 Welcome to **Hetero Parallel DB** – a unique program that showcases the power of parallelism in heterogeneous databases! With this setup, we’re seamlessly combining the worlds of PostgreSQL, MySQL, and MongoDB, allowing you to interact with these databases in parallel, without worrying about the different query syntaxes. Here’s how it all works!
 
@@ -67,10 +67,13 @@ An amazing thing about **Hetero Parallel DB** is that even if you stop or delete
 
 ### Contributions
 
-Contributions are always welcome! However, a small request to keep things real – if you're working on **HTML files** or frontend shit, feel free to use tools like ChatGPT to help you along the way and build things fast as fuck boi !!
+Contributions are always welcome! However, a small request to keep things real – if you're working on **HTML files** or frontend part, feel free to use tools like ChatGPT to help you along the way and build things at a fast pace and precisely as per requirements.
 
-But, when it comes to **routes, configurations, or backend logic**, please refrain yourself from using ChatGPT or Copilot shit. Fuck you if your pookie mind directs you to do so !!
+But, when it comes to **routes, configurations, or backend logic**, please refrain yourself from using ChatGPT or Copilot. As mind power will be appreciated more than AI power.
 
 ---
 
 Enjoy working with **Hetero Parallel DB** and experience the future of database parallelism in action!
+
+more stuff to add later till then stay tuned
+...
